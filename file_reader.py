@@ -1,33 +1,43 @@
 import re
+import csv
 from class_maker import ClassMaker
-class File_Reader:
 
+
+class FileReader:
     def __init__(self):
-        self.my_file = ""
-        self.my_class_content = []
+        self.the_file = ""
+        self.class_content = []
         self.all_my_classes = []
         self.my_relationship_content = []
 
     def add_file(self, file_name):
-        self.my_file = file_name
+        self.the_file = file_name
 
-    def read_file(self):
-        with open(self.my_file, "rt") as my_file:
+    def read_csv_file(self, infile_name, outfile_name):
+        with open(outfile_name, "w") as my_output_file:
+            with open(infile_name, "r") as my_input_file:
+                [my_output_file.write(" ".join(row) + '\n') for row in csv.reader(my_input_file)]
+            my_output_file.close()
+        self.the_file = outfile_name
+
+    def read_txt_file(self):
+        with open(self.the_file, "rt") as my_file:
             contents = my_file.read()
             class_results = re.split(r"class", contents)
             for result in class_results:
-                self.my_class_content.append(result)
+                self.class_content.append(result)
+            ##################################################
             temp_relationship = class_results[0]
             relationship = list(filter(None,temp_relationship.split('\n')))
             relationship.remove((relationship[0]))
             self.my_relationship_content = relationship
             class_results.remove(class_results[0])
-            self.my_class_content = class_results
-        return self.my_class_content
+            self.class_content = class_results
+        return self.class_content
 
 
     def find_classes(self):
-        for class_info in self.my_class_content:
+        for class_info in self.class_content:
             class_name = class_info.split(' ')[1]
             attributes = []
             methods = []
@@ -53,3 +63,5 @@ class File_Reader:
     def printProgram(self):
         for x in self.all_my_classes:
             x.print_class()
+
+

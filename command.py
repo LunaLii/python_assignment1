@@ -8,8 +8,14 @@ class Command(Cmd):
     def __init__(self):
         Cmd.__init__(self)
         self.prompt = ">>>"
+        self.my_name = "unknow"
 
     def do_load(self, file):
+        """
+        Syntax: load [file]
+        :param file: a .txt or .csv file
+        :return: none
+        """
         class_content = self.controller.load_file(file)
         if class_content:
             answer = input("Do you want to display the class content?" +
