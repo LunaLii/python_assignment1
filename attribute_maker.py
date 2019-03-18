@@ -5,11 +5,11 @@ class AttributeMaker:
 
     def identify(self):
         if self._return == "String":
-            self._return = '""'
+            self._return = "str"
         elif self._return == "Integer":
-            self._return = 0
+            self._return = int
         return self._return
 
     def __str__(self):
         self.identify()
-        return f"       self.{self.name} = {self._return}"
+        return f"       self.{self.name}: {self._return}"

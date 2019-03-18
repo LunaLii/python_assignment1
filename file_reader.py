@@ -12,20 +12,19 @@ class File_Reader:
         self.my_file = file_name
 
     def read_file(self):
-        try:
-            with open(self.my_file, "rt") as my_file:
-                contents = my_file.read()
-                class_results = re.split(r"class", contents)
-                for result in class_results:
-                    self.my_class_content.append(result)
-                temp_relationship = class_results[0]
-                relationship = list(filter(None,temp_relationship.split('\n')))
-                relationship.remove((relationship[0]))
-                self.my_relationship_content = relationship
-                class_results.remove(class_results[0])
-                self.my_class_content = class_results
-        except FileNotFoundError:
-            print("Error - File not found")
+        with open(self.my_file, "rt") as my_file:
+            contents = my_file.read()
+            class_results = re.split(r"class", contents)
+            for result in class_results:
+                self.my_class_content.append(result)
+            temp_relationship = class_results[0]
+            relationship = list(filter(None,temp_relationship.split('\n')))
+            relationship.remove((relationship[0]))
+            self.my_relationship_content = relationship
+            class_results.remove(class_results[0])
+            self.my_class_content = class_results
+        return self.my_class_content
+
 
     def find_classes(self):
         for class_info in self.my_class_content:
