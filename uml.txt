@@ -1,0 +1,23 @@
+@startuml
+ClassBuilder *-- Method
+ClassBuilder *-- Attribute
+
+class ClassBuilder {
+  name:String
+  __init__()
+  add_attributes()
+}
+
+class Method {
+  new_name:Integer
+  new_return:String
+  __init__(self, new_name, new_return)
+  __str__()
+}
+
+class Attribute {
+  new_name:String
+  new_return:String
+  __init__(self, new_name, new_return)
+  __str__()
+@enduml
