@@ -1,27 +1,33 @@
 import docx
 
 
-class printClass:
-    relationship_list = []
-    all_relationship_list = []
+class PrintClass:               #class name changed
+    relationship_list = []      #################
 
-    def __init__(self, classFile):
-        self.classFile = classFile
+    def __init__(self,file):
+        self.class_file = file
 
-    def read_word_file(self, file_name):
-        file = docx.Document(file_name)
+    #Luna   load data from .docx file
+    def read_word_file(self):
+        file = docx.Document(self.class_file)
         content = []
         for para in file.paragraphs:
             content.append(para.text + "\n")
-        # print(content[0:])
+        return content
 
+    def read_txt_file(self): #################################
+        file = open(self.class_file, 'r').readlines()
+        return file
 
-    def class_handler(self, classDiagramFile):
-        file = open(classDiagramFile, 'r').readlines()
+    def class_handler(self):    #I drectly use self.class_file in this function
+        if ".txt" in self.class_file[-4:]:     #identify the file type
+            file_content = self.read_txt_file()
+        elif ".docx" in self.class_file[-5:]:
+            file_content = self.read_word_file()
         classList = [[]]
-        for i, m in enumerate(file[1:-1]):  # remove 1st and last character
+        for i, m in enumerate(file_content[1:-1]):
             if m == "\n":
-                if i != len(file[1:-1]) - 1:
+                if i != len(file_content[1:-1]) - 1:
                     classList.append([])
             else:
                 classList[-1].append(m)
@@ -29,24 +35,24 @@ class printClass:
         class_list = classList[1:]
         return class_list
 
-    def get_class_name(self, classArray):
-        for listItem in classArray:
+    def get_class_name(self, class_array):
+        for listItem in class_array:
             if "class" in listItem:
-                temp_class =  listItem[:listItem.index(" {")]
+                temp_class = listItem[:listItem.index(" {")]
                 class_name = temp_class.split(' ')[1]
                 return class_name
 
-    def get_attributes(self, classArray):
+    def get_attributes(self, class_array):
         attributes = []
-        for listItem in classArray:
+        for listItem in class_array:
             if ":" in listItem and "(" not in listItem:
                 result = listItem.split(' ')
                 attributes.append(result[4])
         return attributes
 
-    def get_methods(self, classArray):
+    def get_methods(self, class_array):
         methods = []
-        for listItem in classArray:
+        for listItem in class_array:
             if "(" in listItem:
                 methods.append(listItem[:listItem.index("\n")-2].strip())
         return methods
@@ -63,38 +69,37 @@ class printClass:
                 all_relationship.append(temp_relationship)
         return all_relationship
 
-    def output_class(self, classItem):
-        class_name = self.get_class_name(classItem)
-        # self.get_relationship(class_name)
+    def output_class(self, class_item):
+        class_name = self.get_class_name(class_item)
 
         result = "class " + class_name + ":\n    def __init__(self"
 
-        for listItem in self.get_attributes(classItem):
+        for listItem in self.get_attributes(class_item):
             result += ', ' + listItem
 
         result += '):\n'
-        for listItem in self.get_attributes(classItem):
+        for listItem in self.get_attributes(class_item):
             result += '        self.' + listItem + ' = ' + listItem + '\n'
         for list_item in self.get_relationship(class_name):
             result += list_item + '\n'
 
         result += '\n'
-        for listItem in self.get_methods(classItem):
+        for listItem in self.get_methods(class_item):
             result += '    def ' + listItem + '(self):\n        # Todo: incomplete\n        pass\n'
             result += '\n'
         return result
 
     def outputClasses(self):
         files = []
-        for classItem in self.class_handler(self.classFile):
+        for classItem in self.class_handler():
             files.append(self.get_class_name(classItem) + '.py')
-        for classItem, file in zip(self.class_handler(self.classFile), files):
+        for classItem, file in zip(self.class_handler(), files):
             result = self.output_class(classItem)
             with open(file, "w") as output:
                 output.write(result)
 
-printClass('uml.txt').outputClasses()
-printClass('classDiagram.txt').class_handler('uml.txt')
+PrintClass('uml.docx').outputClasses()
+# printClass('classDiagram.txt').class_handler()
 # c = printClass('classDiagram.docx')
 # c.read_word_file('classDiagram.docx')
 
