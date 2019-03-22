@@ -31,7 +31,9 @@ class Controller:
         all_num = self.file.get_all_num()
         self.chart.create_total_bar(all_num)
 
-
+     def create_pie_chart(self):
+        all_num = self.file.get_all_num()
+        self.chart.create_total_bar(all_num)
 
 # x = Controller()
 # # x.load_file("uml.txt")
