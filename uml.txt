@@ -11,6 +11,8 @@ class Method {
     new_name : String
     new_return : Integer
     __str__()
+    add()
+    output()
 }
 
 class Attribute {
