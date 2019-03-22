@@ -34,6 +34,8 @@ class Command(Cmd):
         if option and option.strip():
             if option == "/a":
                 self.controller.create_pie()
+            elif option == "/p":
+                self.controller.create_pie_chart()   
         else:
             print("please choose one")
 
