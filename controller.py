@@ -29,7 +29,11 @@ class Controller:
 
     def create_pie(self):
         all_num = self.file.get_all_num()
-        self.chart.create_total_bar(all_num)
+        self.chart.create_bar_chart(all_num)
+
+    def create_pie_chart(self):
+        all_num = self.file.get_all_num()
+        self.chart.create_pie_chart(all_num)
 
 
 

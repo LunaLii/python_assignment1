@@ -33,7 +33,9 @@ class Command(Cmd):
     def do_display(self, option):
         if option and option.strip():
             if option == "/a":
-                self.controller.create_pie()
+                self.controller.create_bar_chart()
+            elif option == "/p":
+                self.controller.create_pie_chart()
         else:
             print("please choose one")
 
