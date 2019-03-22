@@ -1,20 +1,17 @@
-from file_reader import FileReader
+from fileHandler import PrintClass
+from chart_maker import ChartMaker
+
 
 class Controller:
-    file = FileReader()
+    file = PrintClass()
+    chart = ChartMaker()
 
-    def load_file(self, infile, temp_file=''):
+    def load_file(self, infile):
         try:
-            if ".txt" in infile[-4:]:
-                self.file.add_file(infile)
-                self.file.read_txt_file()
-                self.file.find_classes()
-                self.file.printProgram()
-            elif ".csv" in infile[-4:]:
-                self.file.read_csv_file(infile,temp_file)
-                self.file.read_txt_file()
-                self.file.find_classes()
-                self.file.printProgram()
+            if ".txt" in infile[-4:] or ".docx" in infile[-5:]:
+                content = self.file.class_handler(infile)
+                return content
+
             else:
                 message = "incorrect file format, please see help load"
                 raise NameError(message)
@@ -26,6 +23,22 @@ class Controller:
         except Exception as e:
             print(e)
 
+    def save_file(self, file_name):
+        class_list = self.load_file(file_name)
+        self.file.outputClasses(class_list)
 
-x = Controller()
-x.load_file("test.csv",temp_file='t.txt')
+    def create_pie(self):
+        all_num = self.file.get_all_num()
+        self.chart.create_total_bar(all_num)
+
+     def create_pie_chart(self):
+        all_num = self.file.get_all_num()
+        self.chart.create_total_bar(all_num)
+
+# x = Controller()
+# # x.load_file("uml.txt")
+# x.save_file("uml.txt")
+# print(sum(x.file.num_all_attribute_list))
+# print(len(x.file.class_name_list))
+# print(sum(x.file.num_all_method_list))
+
