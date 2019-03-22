@@ -93,9 +93,7 @@ class PrintClass:
 
         result += '):\n'
 
-        if Validator.validate_class_name(class_name):    #call the validate function
-            pass
-        else:
+        if not Validator.validate_class_name(class_name):    #call the validate function
             result += "     # the class name is in wrong format \n"
 
         for listItem in attribute_list:

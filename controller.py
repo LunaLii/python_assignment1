@@ -27,7 +27,7 @@ class Controller:
         class_list = self.load_file(file_name)
         self.file.outputClasses(class_list)
 
-    def create_pie(self):
+    def create_bar_chart(self):
         all_num = self.file.get_all_num()
         self.chart.create_bar_chart(all_num)
 
