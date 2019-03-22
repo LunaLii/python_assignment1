@@ -14,7 +14,7 @@ class Command(Cmd):
     def do_load(self, file):
         """
         Syntax: load [file]
-        :param file: a .txt or .csv file
+        :param file: a .txt or .docx file
         :return: none
         """
         class_content = self.controller.load_file(file)
@@ -29,6 +29,14 @@ class Command(Cmd):
 
     def do_save(self,file):
         self.controller.save_file(file)
+
+    def do_display(self, option):
+        if option and option.strip():
+            if option == "/a":
+                self.controller.create_pie()
+        else:
+            print("please choose one")
+
 
 if __name__ == "__main__":
     command = Command()

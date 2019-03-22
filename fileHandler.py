@@ -5,13 +5,10 @@ from validator import Validator
 class PrintClass:
 
     def __init__(self):
-        # self.class_file = ''
         self.relationship_list = []
         self.class_name_list = []
-        self.class_list = []
-
-    # def add_file(self,file):
-    #     self.class_file = file
+        self.num_all_attribute_list = []
+        self.num_all_method_list = []
 
     #Luna   load data from .docx file
     def read_word_file(self,file_name):
@@ -28,7 +25,7 @@ class PrintClass:
     def class_handler(self,file_name):
         class_list = [[]]
         file_content = []
-        if ".txt" in file_name[-4:]:  # identify the file type
+        if ".txt" in file_name[-4:]:
             file_content = self.read_txt_file(file_name)
         elif ".docx" in file_name[-5:]:
             file_content = self.read_word_file(file_name)
@@ -39,16 +36,14 @@ class PrintClass:
             else:
                 class_list[-1].append(m)
         self.relationship_list = class_list[0]
-        self.class_list = class_list[1:]
-        return self.class_list
-        # return class_list
+        class_list = class_list[1:]
+        return class_list
 
     def get_class_name(self, class_array):
         for listItem in class_array:
             if "class" in listItem:
                 temp_class = listItem[:listItem.index(" {")]
                 class_name = temp_class.split(' ')[1]
-                self.class_name_list.append(class_name)
                 return class_name
 
     def get_attributes(self, class_array):
@@ -57,6 +52,8 @@ class PrintClass:
             if ":" in listItem and "(" not in listItem:
                 result = listItem.split(' ')
                 attributes.append(result[4])
+        num_attribute = len(attributes)
+        self.num_all_attribute_list.append(num_attribute)
         return attributes
 
     def get_methods(self, class_array):
@@ -64,8 +61,11 @@ class PrintClass:
         for listItem in class_array:
             if "(" in listItem:
                 methods.append(listItem[:listItem.index("\n")-2].strip())
+        num_method = len(methods)
+        self.num_all_method_list.append(num_method)
         return methods
 
+    #Luna
     def get_relationship(self, class_name):
         all_relationship = []
         for a_relationship in self.relationship_list:
@@ -82,9 +82,13 @@ class PrintClass:
 
     def output_class(self, class_item):
         class_name = self.get_class_name(class_item)
+        self.class_name_list.append(class_name)
+        attribute_list = self.get_attributes(class_item)
+        method_list = self.get_methods(class_item)
+
         result = "class " + class_name + ":\n    def __init__(self"
 
-        for listItem in self.get_attributes(class_item):
+        for listItem in attribute_list:
             result += ', ' + listItem
 
         result += '):\n'
@@ -94,13 +98,14 @@ class PrintClass:
         else:
             result += "     # the class name is in wrong format \n"
 
-        for listItem in self.get_attributes(class_item):
+        for listItem in attribute_list:
             result += '        self.' + listItem + ' = ' + listItem + '\n'
+
         for list_item in self.get_relationship(class_name):
             result += list_item + '\n'
 
         result += '\n'
-        for listItem in self.get_methods(class_item):
+        for listItem in method_list:
             result += '    def ' + listItem + '(self):\n        # Todo: incomplete\n        pass\n'
             result += '\n'
         return result
@@ -113,8 +118,18 @@ class PrintClass:
             result = self.output_class(classItem)
             with open(file, "w") as output:
                 output.write(result)
-        print("files are saved")
+        print("Files are saved")
 
+    def get_all_num(self):
+        class_num = len(self.class_name_list)
+        attribute_num = sum(self.num_all_attribute_list)
+        method_num = sum(self.num_all_method_list)
+        all_num = [class_num, attribute_num, method_num]
+        return all_num
+
+    # def get_num_attribute(self):
+    #     num_attribute = len(self.get_attributes())
+    #     self.num_attribute_list.append(num_attribute)
 
 
 # printClass('classDiagram.txt').class_handler()
@@ -122,7 +137,10 @@ class PrintClass:
 # c.read_word_file('classDiagram.docx')
 #
 # c= PrintClass()
-# print(c.class_handler("uml.docx"))
+# c.class_handler("uml.docx")
+#
+# print(c.class_name_list)
+
 # c.outputClasses()
 
 
