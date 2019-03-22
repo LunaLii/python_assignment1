@@ -18,3 +18,12 @@ class ChartMaker:
         # creating a function to create a pie chart
         plt.pie(values, labels=labels, autopct="%.1f%%", explode=explode)  # autopct is a 'paramater'
         plt.show()  # to show the blank diag
+# clement
+    def create_line_graph(self, all_num):
+        plt.title = 'line graph'
+        plt.xlabel('Classes, Attributes, Methods')
+        plt.ylabel('Number of')
+        x = [1, 2, 3]
+        y = all_num
+        plt.plot(x, y)
+        plt.show()
