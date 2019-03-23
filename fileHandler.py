@@ -15,10 +15,8 @@ class PrintClass:
         self.aggr_1_to_many = []
         self.association_list = []
         self.dependency_list = []
-        # self.all_relationship_list = []
 
-
-    #Luna   load data from .docx file
+    # Luna   load data from .docx file
     def read_word_file(self,file_name):
         file = docx.Document(file_name)
         content = []
@@ -75,50 +73,21 @@ class PrintClass:
 
     #Luna
     def get_relationship(self, class_name):
-        all_relationship = []
         temp_relationship = []
         for a_relationship in self.relationship_list:
             r_class_name = a_relationship.split(" ")
             first_c_name = r_class_name[0]
             second_c_name = r_class_name[-1].replace("\n", "")
             if class_name == first_c_name:
-
-                temp_relationship += self.get_relationship_type(a_relationship,second_c_name)
-                # if len(a_relationship.split(" ")) == 3:
-                #     if "*--" in a_relationship:
-                #         self.compo_1_to_1.append(second_c_name)
-                #         temp_relationship += "        # self. my_" + second_c_name.lower() + " ->" + second_c_name \
-                #                              + "\n" + "        self." + second_c_name.lower() + " = " + "None \n"
-                #     elif "o--" in a_relationship:
-                #         self.aggr_1_to_1.append(second_c_name)
-                #     elif "<--" in a_relationship:
-                #         self.association_list.append(second_c_name)
-                #     elif "<.." in a_relationship:
-                #         self.dependency_list.append(second_c_name)
-                # else:
-                #     if '"1" *-- "many"' in a_relationship:
-                #         self.compo_1_to_many.append(second_c_name)
-                #         temp_relationship += "        # self. my_" + second_c_name.lower() + ": list" + " ->" + second_c_name \
-                #                              + "\n" + "        self." + second_c_name.lower() + " = " + "None\n"
-                #     elif '"1" o-- "many"' in a_relationship:
-                #         self.aggr_1_to_many.append(second_c_name)
-                # self.get_relationship_type(a_relationship,second_c_name)
-                #     for r in self.compo_1_to_many:
-                #         temp_relationship += "        # self. my_" + r.lower() + ": list" + " ->" + r \
-                #                             + "\n" + "        self." + r.lower() + " = " + "None\n"
-                #     for r in self.compo_1_to_1:
-                #         temp_relationship += "        # self. my_" + r.lower() + " ->" + r\
-                #                             + "\n" + "        self." + r.lower() + " = " + "None \n"
-        # all_relationship.append(temp_relationship)
+                temp_relationship += self.identify_relationship_type(a_relationship,second_c_name)
         return temp_relationship
-        # self.all_relationship_list = all_relationship
 
-    def get_relationship_type(self,a_relationship,name):
+    def identify_relationship_type(self,a_relationship,name):
         result = ''
         if len(a_relationship.split(" ")) == 3:
             if "*--" in a_relationship:
                 self.compo_1_to_1.append(name)
-                result += "        # self. my_" + name.lower() + " ->" + name \
+                result += "        # self. my_" + name.lower() + " -> " + name \
                      + "\n" + "        self." + name.lower() + " = " + "None \n"
             elif "o--" in a_relationship:
                 self.aggr_1_to_1.append(name)
@@ -129,12 +98,11 @@ class PrintClass:
         else:
             if '"1" *-- "many"' in a_relationship:
                 self.compo_1_to_many.append(name)
-                result = "        # self. my_" + name.lower() + ": list" + " ->" + name \
+                result = "        # self. my_" + name.lower() + ": list" + " -> " + name \
                           + "\n" + "        self." + name.lower() + " = " + "None\n"
             elif '"1" o-- "many"' in a_relationship:
                 self.aggr_1_to_many.append(name)
         return result
-
 
     def output_class(self, class_item):
         class_name = self.get_class_name(class_item)
@@ -142,7 +110,6 @@ class PrintClass:
         attribute_list = self.get_attributes(class_item)
         method_list = self.get_methods(class_item)
         relationship_list = self.get_relationship(class_name)
-        # print(relationship_list)
         result = "class " + class_name + ":\n    def __init__(self"
 
         for listItem in attribute_list:
@@ -156,9 +123,11 @@ class PrintClass:
         for listItem in attribute_list:
             result += '        self.' + listItem + ' = ' + listItem + '\n'
 
+        if len(attribute_list) == 0:
+            result+= "        pass \n"
+
         for list_item in relationship_list:
             result += list_item
-
 
         result += '\n'
         for listItem in method_list:
