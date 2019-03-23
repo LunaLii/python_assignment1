@@ -1,9 +1,13 @@
 @startuml
 ClassBuilder "1" *-- "many" Method
-ClassBuilder *-- Attribute
+ClassBuilder o-- Attribute
+ClassBuilder <.. Controller
+ClassBuilder <-- Validator
+ClassBuilder *-- Data
 
 class ClassBuilder {
     name : String
+    method : List
     add_attributes()
 }
 
@@ -20,4 +24,12 @@ class Attribute {
     new_return : Integer
     __str__()
 }
+
+class Con {
+    load_file()
+    save_file()
+
+class Vali {
+    validate_class_name()
+    validate_attribute_name()
 @enduml
