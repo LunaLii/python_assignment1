@@ -9,8 +9,8 @@ class ChartMaker:
         size = range(len(numbers))
         plt.bar(size, numbers, tick_label=name_list)
         plt.ylabel("Number")
-        plt.xlabel("Elements of class diagram")
-        plt.title("The Total Numbers of Three Elements in The Class Diagram")
+        plt.xlabel("Elements of UML")
+        plt.title("The total counts for three elements of the UML")
         plt.show()
 
     # Rajan
@@ -20,4 +20,13 @@ class ChartMaker:
         values = all_num
         explode = [0.05, 0, 0]
         plt.pie(values, labels=labels, autopct="%.1f%%", explode=explode)
+        plt.show()
+
+    def create_line_graph(self, all_num):
+        plt.title('Number of Classes, Attributes and Methods')
+        plt.xlabel('1: Classes, 2: Attributes, 3: Methods')
+        plt.ylabel('Total counts for each: (classes, attributes, methods)')
+        x = [1, 2, 3]
+        y = all_num
+        plt.plot(x, y)
         plt.show()

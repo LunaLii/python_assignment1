@@ -1,5 +1,6 @@
 import docx
 from validator import Validator
+import os
 
 
 class PrintClass:
@@ -17,12 +18,23 @@ class PrintClass:
         self.dependency_list = []
 
     # Luna   load data from .docx file
+    # Clement exception
     def read_word_file(self,file_name):
-        file = docx.Document(file_name)
-        content = []
-        for para in file.paragraphs:
-            content.append(para.text + "\n")
-        return content
+        try:
+            if os.path.isfile(file_name):
+                file = docx.Document(file_name)
+                content = []
+                for para in file.paragraphs:
+                    content.append(para.text + "\n")
+                return content
+            else:
+                raise FileNotFoundError
+        except FileNotFoundError:
+            raise FileNotFoundError("Cannot find this file")
+        except NameError as e:
+            print(e)
+        except Exception as e:
+            print(e)
 
     def read_txt_file(self,file_name):
         file = open(file_name, 'r').readlines()
@@ -117,14 +129,16 @@ class PrintClass:
 
         result += '):\n'
 
-        if not Validator.validate_class_name(class_name):    #call the validate function
-            result += "     # the class name is in wrong format \n"
+        if Validator.validate_class_name(class_name):
+            pass
 
         for listItem in attribute_list:
             result += '        self.' + listItem + ' = ' + listItem + '\n'
+            if Validator.validate_attribute_name(listItem):
+                pass
 
         if len(attribute_list) == 0:
-            result+= "        pass \n"
+            result += "        pass \n"
 
         for list_item in relationship_list:
             result += list_item

@@ -13,13 +13,13 @@ class Controller:
                 return content
 
             else:
-                message = "incorrect file format, please see help load"
+                message = "Incorrect file type, please see help load"
                 raise NameError(message)
 
         except NameError as e:
             print(e)
         except FileNotFoundError:
-            print("File not found")
+            print("File is not found")
         except Exception as e:
             print(e)
 
@@ -35,12 +35,19 @@ class Controller:
         all_num = self.file.get_all_num()
         self.chart.create_pie_chart(all_num)
 
+    def create_line_chart(self):
+        all_num = self.file.get_all_num()
+        self.chart.create_line_graph(all_num)
+
 
 
 # x = Controller()
-# # x.load_file("uml.txt")
+# x.load_file("uml.txt")
 # x.save_file("uml.txt")
 # print(sum(x.file.num_all_attribute_list))
 # print(len(x.file.class_name_list))
 # print(sum(x.file.num_all_method_list))
+# print(x.file.compo_1_to_many)
+# print(x.file.compo_1_to_1)
+
 

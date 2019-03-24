@@ -35,6 +35,8 @@ class Command(Cmd):
                 self.controller.create_bar_chart()
             elif option == "/p":
                 self.controller.create_pie_chart()
+            elif option == "/l":
+                self.controller.create_line_chart()
         else:
             print("please choose one")
 

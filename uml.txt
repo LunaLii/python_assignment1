@@ -2,8 +2,9 @@
 ClassBuilder "1" *-- "many" Method
 ClassBuilder o-- Attribute
 ClassBuilder <.. Controller
-ClassBuilder <-- Validator
-ClassBuilder *-- Data
+ClassBuilder <-- File
+ClassBuilder "1" *-- "many" Data
+Attribute *-- Data
 
 class ClassBuilder {
     name : String
@@ -25,11 +26,11 @@ class Attribute {
     __str__()
 }
 
-class Con {
+class File {
     load_file()
     save_file()
 
-class Vali {
+class Data {
     validate_class_name()
     validate_attribute_name()
 @enduml
