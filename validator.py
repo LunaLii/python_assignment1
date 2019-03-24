@@ -28,6 +28,7 @@ class Validator:
     # Clement
     @staticmethod
     def validate_attribute_name(name):
+        # below is doctest
         """
         >>> Validator.validate_attribute_name("Name")
         False
