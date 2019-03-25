@@ -51,6 +51,33 @@ class Validator:
         else:
             return True
 
+    # Rajan
+    @staticmethod
+    def validate_method_name(name):
+        # below is doctest
+        """
+        >>> Validator.validate_method_name("Name")
+        False
+        >>> Validator.validate_method_name("method_name")
+        True
+        >>> Validator.validate_method_name("get_A")
+        False
+        >>> Validator.validate_method_name("get")
+        True
+        >>> Validator.validate_method_name("_get")
+        True
+        >>> Validator.validate_method_name("1_get")
+        False
+        >>> Validator.validate_method_name("get1")
+        True
+        """
+        regex = re.compile('[@!#$%^&*()<>?/|}{~:A-Z]')
+        if regex.search(name) is not None or name[0].isdigit():
+            return False
+        else:
+            return True
+
+
 
 if __name__ == "__main__":
     import doctest

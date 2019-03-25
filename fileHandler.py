@@ -17,8 +17,8 @@ class PrintClass:
         self.association_list = []
         self.dependency_list = []
 
-    # Luna   load data from .docx file
-    # Clement exception
+    # Luna: load data from .docx file
+    # Clement: exception
     def read_word_file(self,file_name):
         try:
             if os.path.isfile(file_name):
@@ -36,9 +36,21 @@ class PrintClass:
         except Exception as e:
             print(e)
 
+    # Clement: load data from .txt file
+    # Rajan: exception
     def read_txt_file(self,file_name):
-        file = open(file_name, 'r').readlines()
-        return file
+        try:
+            if os.path.isfile(file_name):
+                file = open(file_name, 'r').readlines()
+                return file
+            else:
+                raise FileNotFoundError
+        except FileNotFoundError:
+            raise FileNotFoundError("File doesn't exist")
+        except NameError as e:
+            print(e)
+        except Exception as e:
+            print(e)
 
     def class_handler(self,file_name):
         class_list = [[]]
@@ -57,6 +69,7 @@ class PrintClass:
         class_list = class_list[1:]
         return class_list
 
+    # Clement
     def get_class_name(self, class_array):
         for listItem in class_array:
             if "class" in listItem:
@@ -94,6 +107,7 @@ class PrintClass:
                 temp_relationship += self.identify_relationship_type(a_relationship,second_c_name)
         return temp_relationship
 
+    # Luna
     def identify_relationship_type(self,a_relationship,name):
         result = ''
         if len(a_relationship.split(" ")) == 3:

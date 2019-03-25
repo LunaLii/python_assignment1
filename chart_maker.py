@@ -16,12 +16,15 @@ class ChartMaker:
     # Rajan
     def create_pie_chart(self, all_num):
         plt.figure(figsize=(5, 5))
-        labels = ["ClassNum", "AttributeNum", "MethodNum"]
+        labels = ["Total number of ClassNum", "Total number of AttributeNum", "Total number of MethodNum"]
         values = all_num
-        explode = [0.05, 0, 0]
+        explode = [0, 0.05, 0]
         plt.pie(values, labels=labels, autopct="%.1f%%", explode=explode)
+        plt.title("Number of Classes, Attributes and Methods\n", bbox={'facecolor': '0.8', 'pad': 5})
+        plt.legend(labels, loc=3)
         plt.show()
 
+    # Clement
     def create_line_graph(self, all_num):
         plt.title('Number of Classes, Attributes and Methods')
         plt.xlabel('1: Classes, 2: Attributes, 3: Methods')

@@ -9,6 +9,7 @@ class Command(Cmd):
         self.prompt = ">>>"
         self.my_name = "unknown"
 
+    # Luna
     def do_load(self, file):
         """
         Syntax: load [file]
@@ -26,10 +27,26 @@ class Command(Cmd):
             elif answer.upper() == "N":
                 print("The PlantUML content does not been displayed.")
 
+    # Clement
     def do_save(self,file):
+        """
+        Syntax: save [file]
+        Saves the file entered (either a .txt or docx file)
+        :param file: a .txt (for a text file) or .docx (for a word document) file e.g. myWordDocument.docx
+        Specifies the name and file type (.txt (text file) or .docx (Microsoft Word file)) being saved. e.g. myTextDocument.txt (text file)
+        :return: none
+        """
         self.controller.save_file(file)
 
+    # Rajan
+    # Change commands and options: Luna: /a; Rajan: /p; Clement: /l
     def do_display(self, option):
+        """
+        Syntax: display [/a | /p | /l]
+        Display bar chart, pie chart or line graph
+        :param option: /a: display bar chart, /p: display pie chart, /l: display line graph
+        :return: none
+        """
         if option and option.strip():
             if option == "/a":
                 self.controller.create_bar_chart()
