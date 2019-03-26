@@ -16,10 +16,11 @@ class PrintClass:
         self.aggr_1_to_many = []
         self.association_list = []
         self.dependency_list = []
+        self.class_list = []
 
     # Luna: load data from .docx file
     # Clement: exception
-    def read_word_file(self,file_name):
+    def read_word_file(self, file_name):
         try:
             if os.path.isfile(file_name):
                 file = docx.Document(file_name)
@@ -38,7 +39,7 @@ class PrintClass:
 
     # Clement: load data from .txt file
     # Rajan: exception
-    def read_txt_file(self,file_name):
+    def read_txt_file(self, file_name):
         try:
             if os.path.isfile(file_name):
                 file = open(file_name, 'r').readlines()
@@ -52,7 +53,7 @@ class PrintClass:
         except Exception as e:
             print(e)
 
-    def class_handler(self,file_name):
+    def class_handler(self, file_name):
         class_list = [[]]
         file_content = []
         if ".txt" in file_name[-4:]:
@@ -66,8 +67,8 @@ class PrintClass:
             else:
                 class_list[-1].append(m)
         self.relationship_list = class_list[0]
-        class_list = class_list[1:]
-        return class_list
+        self.class_list = class_list[1:]
+        return self.class_list
 
     # Clement
     def get_class_name(self, class_array):
@@ -96,7 +97,7 @@ class PrintClass:
         self.num_all_method_list.append(num_method)
         return methods
 
-    #Luna
+    # Luna
     def get_relationship(self, class_name):
         temp_relationship = []
         for a_relationship in self.relationship_list:
@@ -104,17 +105,18 @@ class PrintClass:
             first_c_name = r_class_name[0]
             second_c_name = r_class_name[-1].replace("\n", "")
             if class_name == first_c_name:
-                temp_relationship += self.identify_relationship_type(a_relationship,second_c_name)
+                temp_relationship += self.identify_r_type(a_relationship,
+                                                          second_c_name)
         return temp_relationship
 
     # Luna
-    def identify_relationship_type(self,a_relationship,name):
-        result = ''
+    def identify_r_type(self, a_relationship, name):
+        a_r = ''
         if len(a_relationship.split(" ")) == 3:
             if "*--" in a_relationship:
                 self.compo_1_to_1.append(name)
-                result += "        # self. my_" + name.lower() + " -> " + name \
-                     + "\n" + "        self." + name.lower() + " = " + "None \n"
+                a_r += "        # self. my_" + name.lower() + " -> " + name\
+                    + "\n" + "        self." + name.lower() + " = " + "None \n"
             elif "o--" in a_relationship:
                 self.aggr_1_to_1.append(name)
             elif "<--" in a_relationship:
@@ -124,11 +126,12 @@ class PrintClass:
         else:
             if '"1" *-- "many"' in a_relationship:
                 self.compo_1_to_many.append(name)
-                result = "        # self. my_" + name.lower() + ": list" + " -> " + name \
-                          + "\n" + "        self." + name.lower() + " = " + "None\n"
+                a_r = "        # self. my_" + name.lower() + ": list" + " -> "\
+                      + name + "\n" + "        self." + name.lower() + " = "\
+                      + "None\n"
             elif '"1" o-- "many"' in a_relationship:
                 self.aggr_1_to_many.append(name)
-        return result
+        return a_r
 
     def output_class(self, class_item):
         class_name = self.get_class_name(class_item)
@@ -159,15 +162,16 @@ class PrintClass:
 
         result += '\n'
         for listItem in method_list:
-            result += '    def ' + listItem + '(self):\n        # Todo: incomplete\n        pass\n'
+            result += '    def ' + listItem + '(self):\n        # Todo: inco' \
+                                              'mplete\n        pass\n'
             result += '\n'
         return result
 
-    def outputClasses(self,class_list):
+    def output_classes(self, file_dir):
         files = []
-        for classItem in class_list:
-            files.append(self.get_class_name(classItem) + '.py')
-        for classItem, file in zip(class_list, files):
+        for classItem in self.class_list:
+            files.append(file_dir + self.get_class_name(classItem) + '.py')
+        for classItem, file in zip(self.class_list, files):
             result = self.output_class(classItem)
             with open(file, "w") as output:
                 output.write(result)
@@ -179,20 +183,3 @@ class PrintClass:
         method_num = sum(self.num_all_method_list)
         all_num = [class_num, attribute_num, method_num]
         return all_num
-
-    # def get_num_attribute(self):
-    #     num_attribute = len(self.get_attributes())
-    #     self.num_attribute_list.append(num_attribute)
-
-
-# printClass('classDiagram.txt').class_handler()
-# c = printClass('classDiagram.docx')
-# c.read_word_file('classDiagram.docx')
-#
-
-#
-# print(c.class_name_list)
-
-# c.outputClasses()
-
-

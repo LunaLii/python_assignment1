@@ -1,6 +1,7 @@
 from cmd import Cmd
 from controller import Controller
 
+
 class Command(Cmd):
     controller = Controller()
 
@@ -13,22 +14,14 @@ class Command(Cmd):
     def do_load(self, file):
         """
         Syntax: load [file]
-        Load the file and decide whether to display the PlantUML content or not
+        Load the PlantUML file that users want to convert into code frame
         :param file: a .txt or .docx file for PlantUML
         :return:
         """
-        class_content = self.controller.load_file(file)
-        if class_content:
-            answer = input("Do you want to display the PlantUML content?" +
-                           "\n [Y/N]"
-                           "\n>>>")
-            if answer.upper() == "Y":
-                print(class_content)
-            elif answer.upper() == "N":
-                print("The PlantUML content does not been displayed.")
+        self.controller.load_file(file)
 
     # Clement
-    def do_save(self,file):
+    def do_create_class_files(self, file):
         """
         Syntax: save [file]
         Saves the file entered (either a .txt or docx file)
@@ -57,8 +50,11 @@ class Command(Cmd):
         else:
             print("please choose one")
 
+    def do_quit(self, line):
+        print("Quitting ......")
+        return True
+
 
 if __name__ == "__main__":
     command = Command()
     command.cmdloop()
-
