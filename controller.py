@@ -6,10 +6,19 @@ class Controller:
     file = PrintClass()
     chart = ChartMaker()
 
-    def load_file(self, infile):
+    @staticmethod
+    def load_file(infile):
+        r"""
+        >>> Controller.load_file("test_read_file.csv")
+        Incorrect file type, please see help load
+        >>> Controller.load_file("test2.docx")
+        [['class ToyBox {\n', '    name : String\n', '}\n'], ['class Toy {\n', '}\n']]
+        >>> Controller.load_file("C:\\Users\Luna\ICT\\test2.docx")
+        File is not found
+        """
         try:
             if ".txt" in infile[-4:] or ".docx" in infile[-5:]:
-                content = self.file.class_handler(infile)
+                content = Controller.file.class_handler(infile)
                 return content
 
             else:
@@ -40,6 +49,10 @@ class Controller:
         self.chart.create_line_graph(all_num)
 
 
+if __name__ == "__main__":
+    import doctest
+    doctest.testmod(verbose=True)
+
 
 # x = Controller()
 # x.load_file("uml.txt")
@@ -49,5 +62,6 @@ class Controller:
 # print(sum(x.file.num_all_method_list))
 # print(x.file.compo_1_to_many)
 # print(x.file.compo_1_to_1)
+# print(Controller.file.read_word_file("test.docx"))
 
 

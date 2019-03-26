@@ -36,27 +36,32 @@ class TestDataExtraction(unittest.TestCase):
         self.assertFalse(result_2)
         self.assertFalse(result_3)
 
-    def test_validate_method_name_is_true(self):
-        validator = Validator()
-        result_1 = validator.validate_method_name("get_name")
-        result_2 = validator.validate_method_name("get_1")
-        result_3 = validator.validate_method_name("get")
-        self.assertTrue(result_1)
-        self.assertTrue(result_2)
-        self.assertTrue(result_3)
-
-    def test_validate_method_name_is_false(self):
-        validator = Validator()
-        result_1 = validator.validate_method_name("Get")
-        result_2 = validator.validate_method_name("1_get")
-        result_3 = validator.validate_method_name("get_Name")
-        self.assertFalse(result_1)
-        self.assertFalse(result_2)
-        self.assertFalse(result_3)
+    def test_read_word_file(self):
+        print_class = PrintClass()
+        actual_result = print_class.read_word_file("test2.docx")
+        expected = ["@startuml\n", "ToyBox *-- Toy\n", "\n", "class ToyBox {\n", "    name : String\n", "}\n", "\n", "class Toy {\n", "}\n",
+                    "@enduml\n"]
+        self.assertEqual(expected,actual_result)
 
     def test_get_method_name(self):
-        # to be continued
-        pass
+        print_class = PrintClass()
+        class_item = print_class.class_handler("test.docx")
+        actual_one = print_class.get_methods(class_item[0])
+        expected_one = ["add_toy", "get_toy"]
+        actual_two = print_class.get_methods(class_item[1])
+        expected_two = ["__str__"]
+        self.assertEqual(expected_one, actual_one)
+        self.assertEqual(expected_two, actual_two)
+
+    # def test_load_file_wrong_type_exception(self):
+    #     c = Controller()
+    #     # with self.assertRaises(NameError) as context:
+    #     #     c.load_file("uml.csv")
+    #     # self.assertTrue("Incorrect file type, please see help load" in str(context.exception))
+    #     self.assertRaises(FileNotFoundError,c.load_file, "C:\\Users\Luna\ICT\\uml.docx")
+
+
+
 
 
 

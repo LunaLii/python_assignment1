@@ -171,7 +171,7 @@ class PrintClass:
             result = self.output_class(classItem)
             with open(file, "w") as output:
                 output.write(result)
-        print("Files are saved")
+        print("Files are created")
 
     def get_all_num(self):
         class_num = len(self.class_name_list)
