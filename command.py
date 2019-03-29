@@ -18,7 +18,8 @@ class Command(Cmd):
         :param file: a .txt or .docx file for PlantUML
         :return:
         """
-        self.controller.load_file(file)
+        if self.controller.load_file(file):
+            print("File is loaded")
 
     # Clement
     def do_create_class_files(self, file_dir):
@@ -43,7 +44,10 @@ class Command(Cmd):
         """
         if option and option.strip():
             if option == "/a":
-                self.controller.create_bar_chart()
+                if self.controller.create_bar_chart() is False:
+                    print("Please load PlantUML and then create the class files first")
+                else:
+                    self.controller.create_bar_chart()
             elif option == "/p":
                 self.controller.create_pie_chart()
             elif option == "/l":

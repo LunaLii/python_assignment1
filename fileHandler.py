@@ -1,6 +1,6 @@
-import docx
+from docx import Document
 from validator import Validator
-import os
+import os.path
 
 
 class PrintClass:
@@ -23,7 +23,7 @@ class PrintClass:
     def read_word_file(self, file_name):
         try:
             if os.path.isfile(file_name):
-                file = docx.Document(file_name)
+                file = Document(file_name)
                 content = []
                 for para in file.paragraphs:
                     content.append(para.text + "\n")
@@ -171,9 +171,10 @@ class PrintClass:
         for classItem in self.class_list:
             files.append(file_dir + self.get_class_name(classItem) + '.py')
         for classItem, file in zip(self.class_list, files):
-            result = self.output_class(classItem)
-            with open(file, "w") as output:
-                output.write(result)
+            if Validator.validate_class_name(self.get_class_name(classItem)):
+                result = self.output_class(classItem)
+                with open(file, "w") as output:
+                    output.write(result)
         print("Files are created")
 
     def get_all_num(self):

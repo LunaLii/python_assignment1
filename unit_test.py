@@ -10,6 +10,7 @@ class TestDataExtraction(unittest.TestCase):
         # be executed before each test
         self.test_class = PrintClass()
         self.validator = Validator()
+        self.controller = Controller()
 
     def test_get_class_name(self):
         list_1 = ['class a {\n', '    n : String\n', '    add()\n', '}\n']
@@ -37,73 +38,62 @@ class TestDataExtraction(unittest.TestCase):
 
     # Luna
     def test_validate_class_name_is_true(self):
-        validator = Validator()
-        result_1 = validator.validate_class_name("Name")
-        result_2 = validator.validate_class_name("ClassName")
-        self.assertTrue(result_1)
-        self.assertTrue(result_2)
+        result_1 = self.validator.validate_class_name("Name")
+        result_2 = self.validator.validate_class_name("ClassName")
+        self.assertTrue(result_1, "invalid class name")
+        self.assertTrue(result_2, "invalid class name")
 
     def test_validate_class_name_using_special_char(self):
-        validator = Validator()
-        result = validator.validate_class_name("Name$%^&")
-        self.assertFalse(result)
+        result = self.validator.validate_class_name("Name$%^&")
+        self.assertFalse(result, "valid class name")
 
     def test_validate_class_name_using_lower(self):
-        validator = Validator()
-        result = validator.validate_class_name("name")
-        self.assertFalse(result)
+        result = self.validator.validate_class_name("name")
+        self.assertFalse(result, "valid class name")
 
     def test_validate_class_name_start_with_num(self):
-        validator = Validator()
-        result = validator.validate_class_name("123Name")
-        self.assertFalse(result)
+        result = self.validator.validate_class_name("123Name")
+        self.assertFalse(result, "valid class name")
+
+    def test_validate_class_name_start_with_char(self):
+        result = self.validator.validate_class_name("$%^_+Name")
+        self.assertFalse(result, "valid class name")
 
     def test_read_word_file(self):
-        print_class = PrintClass()
-        actual = print_class.read_word_file("test2.docx")
+        actual = self.test_class.read_word_file("test2.docx")
         expect = ["@startuml\n", "ToyBox *-- Toy\n", "\n", "class ToyBox {\n",
                   "    name : String\n", "}\n", "\n", "class Toy {\n", "}\n",
                   "@enduml\n"]
-        self.assertEqual(expect, actual)
+        self.assertEqual(expect, actual, "cannot read word file")
 
     def test_read_txt_file(self):
-        print_class = PrintClass()
-        actual = print_class.read_txt_file("test2.txt")
+        actual = self.test_class.read_txt_file("test2.txt")
         expect = ["@startuml\n", "ToyBox *-- Toy\n", "\n", "class ToyBox {\n",
                   "    name : String\n", "}\n", "\n", "class Toy {\n", "}\n",
                   "@enduml\n"]
-        self.assertEqual(expect, actual)
+        self.assertEqual(expect, actual, "cannot read txt file")
 
     def test_load_word_file(self):
-        controller = Controller()
-        actual = controller.load_file("test2.docx")
-        expected = [['class ToyBox {\n', '    name : String\n', '}\n'],
-                    ['class Toy {\n', '}\n']]
-        self.assertEqual(expected, actual)
+        actual = self.controller.load_file("test2.docx")
+        self.assertTrue(actual, "cannot load word file")
 
     def test_load_txt_file(self):
-        controller = Controller()
-        actual = controller.load_file("test2.txt")
-        expected = [['class ToyBox {\n', '    name : String\n', '}\n'],
-                    ['class Toy {\n', '}\n']]
-        self.assertEqual(expected, actual)
+        actual = self.controller.load_file("test2.txt")
+        self.assertTrue(actual, "cannot load txt file")
 
     def test_load_file_not_found_exception(self):
-        controller = Controller()
-        actual = controller.load_file("C:\\Users\\Luna\\ICT\\test2.txt")
+        actual = self.controller.load_file("C:\\Users\\Luna\\ICT\\test2.txt")
         self.assertRaises(FileNotFoundError, actual)
 
     def test_load_incorrect_file_exception(self):
-        controller = Controller()
-        actual = controller.load_file("test2.csv")
+        actual = self.controller.load_file("test2.csv")
         self.assertRaises(NameError, actual)
 
     def test_get_method_name(self):
-        print_class = PrintClass()
-        class_item = print_class.class_handler("test_method.docx")
-        actual_one = print_class.get_methods(class_item[0])
+        class_item = self.test_class.class_handler("test_method.docx")
+        actual_one = self.test_class.get_methods(class_item[0])
         expected_one = ["add_toy", "get_toy"]
-        actual_two = print_class.get_methods(class_item[1])
+        actual_two = self.test_class.get_methods(class_item[1])
         expected_two = ["__str__"]
         self.assertEqual(expected_one, actual_one)
         self.assertEqual(expected_two, actual_two)

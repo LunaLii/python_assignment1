@@ -1,5 +1,5 @@
-import re
-
+from re import match
+from re import compile
 
 class Validator:
     # Luna
@@ -18,12 +18,12 @@ class Validator:
         False
         >>> Validator.validate_class_name("1ClassName>")
         False
+        >>> Validator.validate_class_name("-+ClassName>")
+        False
         """
-        regex = re.compile('[@_!#$%^&*()<>?/|}{~:]')
-        if class_name[0].isupper() and regex.search(class_name) is None:
+        if class_name[0].isupper() and match("^[A-Za-z0-9]*$", class_name):
             return True
-        else:
-            return False
+        return False
 
     @staticmethod
     def validate_attribute_name(name):
@@ -47,7 +47,7 @@ class Validator:
 
         # below is doctest
 
-        regex = re.compile('[@!#$%^&*()<>?/|}{~:A-Z]')
+        regex = compile('[@!#$%^&*()<>?/|}{~:A-Z]')
         res = [
             'and',
             'assert',
@@ -107,7 +107,7 @@ class Validator:
 
         # below is doctest
 
-        regex = re.compile('[@!#$%^&*()<>?/|}{~:A-Z]')
+        regex = compile('[@!#$%^&*()<>?/|}{~:A-Z]')
         if regex.search(name) is not None or name[0].isdigit():
             return False
         else:
