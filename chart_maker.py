@@ -21,8 +21,7 @@ class ChartMaker:
         values = all_num
         explode = [0, 0.05, 0]
         plt.pie(values, labels=labels, autopct="%.1f%%", explode=explode)
-        plt.title("Number of Classes, Attributes and Methods\n", bbox=
-                  {'facecolor': '0.8', 'pad': 5})
+        plt.title("Number of Classes, Attributes and Methods\n")
         plt.legend(labels, loc=3)
         plt.show()
 

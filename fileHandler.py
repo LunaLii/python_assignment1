@@ -155,16 +155,15 @@ class PrintClass:
                 pass
 
         if len(attribute_list) == 0:
-            result += "        pass \n"
+            result += "        pass\n"
 
         for list_item in relationship_list:
             result += list_item
 
-        result += '\n'
         for listItem in method_list:
+            result += '\n'
             result += '    def ' + listItem + '(self):\n        # Todo: inco' \
                                               'mplete\n        pass\n'
-            result += '\n'
         return result
 
     def output_classes(self, file_dir):

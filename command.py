@@ -21,15 +21,14 @@ class Command(Cmd):
         self.controller.load_file(file)
 
     # Clement
-    def do_create_class_files(self, file):
+    def do_create_class_files(self, file_dir):
         """
-        Syntax: save [file]
+        Syntax: create_class_files [file_dir]
         Saves the file entered (either a .txt or docx file)
-        :param file: a .txt (for a text file) or .docx (for a word document) file e.g. myWordDocument.docx
-        Specifies the name and file type (.txt (text file) or .docx (Microsoft Word file)) being saved. e.g. myTextDocument.txt (text file)
+        :param file_dir: for the location of the file e.g. C:\\
         :return: none
         """
-        self.controller.save_file(file)
+        self.controller.save_file(file_dir)
 
     # Rajan
     # Change commands and options: Luna: /a; Rajan: /p; Clement: /l
@@ -37,7 +36,9 @@ class Command(Cmd):
         """
         Syntax: display [/a | /p | /l]
         Display bar chart, pie chart or line graph
-        :param option: /a: display bar chart, /p: display pie chart, /l: display line graph
+        :param option: /a: display bar chart
+                       /p: display pie chart
+                       /l: display line graph
         :return: none
         """
         if option and option.strip():

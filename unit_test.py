@@ -1,8 +1,7 @@
 from fileHandler import PrintClass
 import unittest
 from validator import Validator
-# Happy day scenario : done
-# Exceptions and edge cases : done
+from controller import Controller
 
 
 class TestDataExtraction(unittest.TestCase):
@@ -10,6 +9,7 @@ class TestDataExtraction(unittest.TestCase):
     def setUp(self):
         # be executed before each test
         self.test_class = PrintClass()
+        self.validator = Validator()
 
     def test_get_class_name(self):
         list_1 = ['class a {\n', '    n : String\n', '    add()\n', '}\n']
@@ -19,6 +19,22 @@ class TestDataExtraction(unittest.TestCase):
         self.assertEqual(self.test_class.get_class_name(list_2), '')
         self.assertIsNone(self.test_class.get_class_name(list_3))
 
+    def test_validate_attribute_name_true(self):
+        self.assertTrue(self.validator.validate_attribute_name("attribute"))
+        self.assertTrue(self.validator.validate_attribute_name("clement"))
+
+    def test_validate_attribute_name_false(self):
+        self.assertFalse(self.validator.validate_attribute_name("<clement"))
+        self.assertFalse(self.validator.validate_attribute_name("??i"))
+        self.assertFalse(self.validator.validate_attribute_name("break"))
+        self.assertFalse(self.validator.validate_attribute_name("pass"))
+        self.assertFalse(self.validator.validate_attribute_name(42))
+        self.assertFalse(self.validator.validate_attribute_name(3.14))
+        self.assertFalse(self.validator.validate_attribute_name(
+            '--------------------------------------'
+            '-------------------------------------'
+        ))
+
     # Luna
     def test_validate_class_name_is_true(self):
         validator = Validator()
@@ -27,25 +43,64 @@ class TestDataExtraction(unittest.TestCase):
         self.assertTrue(result_1)
         self.assertTrue(result_2)
 
-    def test_validate_class_name_is_false(self):
+    def test_validate_class_name_using_special_char(self):
         validator = Validator()
-        result_1 = validator.validate_class_name("name")
-        result_2 = validator.validate_class_name("Name$%^&")
-        result_3 = validator.validate_class_name("123Name")
-        self.assertFalse(result_1)
-        self.assertFalse(result_2)
-        self.assertFalse(result_3)
+        result = validator.validate_class_name("Name$%^&")
+        self.assertFalse(result)
+
+    def test_validate_class_name_using_lower(self):
+        validator = Validator()
+        result = validator.validate_class_name("name")
+        self.assertFalse(result)
+
+    def test_validate_class_name_start_with_num(self):
+        validator = Validator()
+        result = validator.validate_class_name("123Name")
+        self.assertFalse(result)
 
     def test_read_word_file(self):
         print_class = PrintClass()
-        actual_result = print_class.read_word_file("test2.docx")
-        expected = ["@startuml\n", "ToyBox *-- Toy\n", "\n", "class ToyBox {\n", "    name : String\n", "}\n", "\n", "class Toy {\n", "}\n",
-                    "@enduml\n"]
-        self.assertEqual(expected,actual_result)
+        actual = print_class.read_word_file("test2.docx")
+        expect = ["@startuml\n", "ToyBox *-- Toy\n", "\n", "class ToyBox {\n",
+                  "    name : String\n", "}\n", "\n", "class Toy {\n", "}\n",
+                  "@enduml\n"]
+        self.assertEqual(expect, actual)
+
+    def test_read_txt_file(self):
+        print_class = PrintClass()
+        actual = print_class.read_txt_file("test2.txt")
+        expect = ["@startuml\n", "ToyBox *-- Toy\n", "\n", "class ToyBox {\n",
+                  "    name : String\n", "}\n", "\n", "class Toy {\n", "}\n",
+                  "@enduml\n"]
+        self.assertEqual(expect, actual)
+
+    def test_load_word_file(self):
+        controller = Controller()
+        actual = controller.load_file("test2.docx")
+        expected = [['class ToyBox {\n', '    name : String\n', '}\n'],
+                    ['class Toy {\n', '}\n']]
+        self.assertEqual(expected, actual)
+
+    def test_load_txt_file(self):
+        controller = Controller()
+        actual = controller.load_file("test2.txt")
+        expected = [['class ToyBox {\n', '    name : String\n', '}\n'],
+                    ['class Toy {\n', '}\n']]
+        self.assertEqual(expected, actual)
+
+    def test_load_file_not_found_exception(self):
+        controller = Controller()
+        actual = controller.load_file("C:\\Users\\Luna\\ICT\\test2.txt")
+        self.assertRaises(FileNotFoundError, actual)
+
+    def test_load_incorrect_file_exception(self):
+        controller = Controller()
+        actual = controller.load_file("test2.csv")
+        self.assertRaises(NameError, actual)
 
     def test_get_method_name(self):
         print_class = PrintClass()
-        class_item = print_class.class_handler("test.docx")
+        class_item = print_class.class_handler("test_method.docx")
         actual_one = print_class.get_methods(class_item[0])
         expected_one = ["add_toy", "get_toy"]
         actual_two = print_class.get_methods(class_item[1])
@@ -53,18 +108,39 @@ class TestDataExtraction(unittest.TestCase):
         self.assertEqual(expected_one, actual_one)
         self.assertEqual(expected_two, actual_two)
 
-    # def test_load_file_wrong_type_exception(self):
-    #     c = Controller()
-    #     # with self.assertRaises(NameError) as context:
-    #     #     c.load_file("uml.csv")
-    #     # self.assertTrue("Incorrect file type, please see help load" in str(context.exception))
-    #     self.assertRaises(FileNotFoundError,c.load_file, "C:\\Users\Luna\ICT\\uml.docx")
+    # Rajan
+    def test_validate_method_name_is_false(self):
+        validator = Validator()
+        result_1 = validator.validate_method_name("Get")
+        result_2 = validator.validate_method_name("1_get")
+        result_3 = validator.validate_method_name("get_Name")
+        self.assertFalse(result_1)
+        self.assertFalse(result_2)
+        self.assertFalse(result_3)
 
+    def test_validate_method_name_is_true2(self):
+        validator = Validator()
+        result_1 = validator.validate_method_name("_get")
+        result_2 = validator.validate_method_name("get1")
+        self.assertTrue(result_1)
+        self.assertTrue(result_2)
 
+    def test_validate_method_name_is_true(self):
+        validator = Validator()
+        result_1 = validator.validate_method_name("method_name")
+        result_2 = validator.validate_method_name("get")
+        self.assertTrue(result_1)
+        self.assertTrue(result_2)
 
-
+    def test_validate_method_name_is_false2(self):
+        validator = Validator()
+        result_1 = validator.validate_method_name("Name")
+        result_2 = validator.validate_method_name("get_Name")
+        result_3 = validator.validate_method_name("1_get")
+        self.assertFalse(result_1)
+        self.assertFalse(result_2)
+        self.assertFalse(result_3)
 
 
 if __name__ == '__main__':
-    unittest.main(verbosity=2)  # with more details
-    # unittest.main()
+    unittest.main(verbosity=2)

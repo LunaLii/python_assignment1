@@ -25,36 +25,69 @@ class Validator:
         else:
             return False
 
-    # Clement
     @staticmethod
     def validate_attribute_name(name):
-        # below is doctest
         """
         >>> Validator.validate_attribute_name("Name")
         False
         >>> Validator.validate_attribute_name("break")
         False
-        >>> Validator.validate_attribute_name("attributedfjkslsdjfkdslfj;dkslfjskdlfj;dskl;fjkslfjkal;jfdkla;jfksljfkl;ajfdk;ljafkld;jfkjfakld;jfkd;fa")
-        False
         >>> Validator.validate_attribute_name("a")
         False
-        >>> Validator.validate_attribute_name(1)
+        >>> Validator.validate_attribute_name(1234)
         False
         >>> Validator.validate_attribute_name("attribute")
         True
+        >>> Validator.validate_attribute_name("Sometimes" \
+                "python programming can be hard")
+        False
+        >>> Validator.validate_attribute_name("/&*(")
+        False
         """
-        reserved = ['and', 'assert', 'break', 'class', 'continue', 'def', 'del', 'elif', 'else', 'except', 'exec',
-                    'finally', 'for', 'from', 'global', 'if', 'import', 'in', 'is', 'lambda', 'not', 'or', 'pass',
-                    'print', 'raise', 'return', 'try', 'while']
-        if not isinstance(name, str) or name[0].isupper() or name in reserved or not 1 < len(name) < 31:
+
+        # below is doctest
+
+        regex = re.compile('[@!#$%^&*()<>?/|}{~:A-Z]')
+        res = [
+            'and',
+            'assert',
+            'break',
+            'class',
+            'continue',
+            'def',
+            'del',
+            'elif',
+            'else',
+            'except',
+            'exec',
+            'finally',
+            'for',
+            'from',
+            'global',
+            'if',
+            'import',
+            'in',
+            'is',
+            'lambda',
+            'not',
+            'or',
+            'pass',
+            'print',
+            'raise',
+            'return',
+            'try',
+            'while',
+        ]
+        if not isinstance(name, str) or name in res or \
+                not 1 < len(name) < 31 or regex.search(name) is not None:
             return False
         else:
             return True
 
     # Rajan
+
     @staticmethod
     def validate_method_name(name):
-        # below is doctest
         """
         >>> Validator.validate_method_name("Name")
         False
@@ -71,6 +104,9 @@ class Validator:
         >>> Validator.validate_method_name("get1")
         True
         """
+
+        # below is doctest
+
         regex = re.compile('[@!#$%^&*()<>?/|}{~:A-Z]')
         if regex.search(name) is not None or name[0].isdigit():
             return False

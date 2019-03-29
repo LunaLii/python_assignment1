@@ -1,36 +1,16 @@
 @startuml
-ClassBuilder "1" *-- "many" Method
-ClassBuilder o-- Attribute
-ClassBuilder <.. Controller
-ClassBuilder <-- File
-ClassBuilder "1" *-- "many" Data
-Attribute *-- Data
+Zoo "1" *-- "many" Animal
 
-class ClassBuilder {
+class Zoo {
     name : String
-    method : List
-    add_attributes()
+    location : String
+    add_animal()
+    get_animal()
 }
 
-class Method {
-    new_name : String
-    new_return : Integer
-    __str__()
-    add()
-    output()
-}
-
-class Attribute {
-    new_name : String
-    new_return : Integer
+class Animal {
+    name : String
+    number : Integer
     __str__()
 }
-
-class File {
-    load_file()
-    save_file()
-
-class Data {
-    validate_class_name()
-    validate_attribute_name()
 @enduml
